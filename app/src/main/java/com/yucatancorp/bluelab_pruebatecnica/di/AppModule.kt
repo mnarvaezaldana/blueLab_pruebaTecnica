@@ -24,6 +24,8 @@ object AppModule {
             .create(MoviesApi::class.java)
     }
 
+    @Provides
+    @Singleton
     fun provideMoviesRepository(moviesApi: MoviesApi, app: Application): IMoviesRepository {
         return MovieRepositoryImplementation(moviesApi, app)
     }

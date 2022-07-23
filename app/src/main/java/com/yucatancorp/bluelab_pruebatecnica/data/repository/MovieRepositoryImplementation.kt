@@ -1,11 +1,12 @@
 package com.yucatancorp.bluelab_pruebatecnica.data.repository
 
 import android.app.Application
+import android.util.Log
 import com.yucatancorp.bluelab_pruebatecnica.data.remote.MoviesApi
 import com.yucatancorp.bluelab_pruebatecnica.domain.IMoviesRepository
 
 class MovieRepositoryImplementation(
-    private val api: MoviesApi,
+    private val moviesApi: MoviesApi,
     private val appContext: Application
 ): IMoviesRepository {
 
