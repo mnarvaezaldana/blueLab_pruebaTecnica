@@ -1,11 +1,9 @@
 package com.yucatancorp.bluelab_pruebatecnica.data.repository
 
 import android.app.Application
-import android.util.Log
-import com.yucatancorp.bluelab_pruebatecnica.data.local.movies.MovieEntity
 import com.yucatancorp.bluelab_pruebatecnica.data.local.movies.MoviesDatabase
 import com.yucatancorp.bluelab_pruebatecnica.data.local.toMovieEntity
-import com.yucatancorp.bluelab_pruebatecnica.data.models.Movie
+import com.yucatancorp.bluelab_pruebatecnica.data.local.toTopRatedMoviesEntity
 import com.yucatancorp.bluelab_pruebatecnica.data.remote.MoviesApi
 import com.yucatancorp.bluelab_pruebatecnica.domain.IMoviesRepository
 
@@ -15,15 +13,16 @@ class MovieRepositoryImplementation(
     private val appContext: Application
 ): IMoviesRepository {
 
-    private val dao = db.dao
+    private val moviesDao = db.daoMovies
+    private val topRatedMoviesDao = db.topRatedMovies
 
     override suspend fun getTopRatedCall() {
         val response = moviesApi.getTopRatedCall()
+        topRatedMoviesDao.insertTopRated(response.toTopRatedMoviesEntity())
         response.results.forEach { movie ->
-            dao.insertMovie(movie.toMovieEntity())
+            moviesDao.insertMovie(movie.toMovieEntity())
         }
-        val responseMovie = dao.searchMovie(278)
-        Log.e("message", responseMovie.first().customTitle)
+        //val responseMovie = moviesDao.searchMovie(278)
     }
 
     override suspend fun getNowPlayingCall() {

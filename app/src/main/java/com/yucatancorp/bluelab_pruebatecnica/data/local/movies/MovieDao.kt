@@ -9,7 +9,7 @@ import androidx.room.Query
 interface MovieDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertMovie(MovieEntity: MovieEntity)
+    suspend fun insertMovie(movieEntity: MovieEntity)
 
     @Query("SELECT * FROM movies where movie_id LIKE :id")
      suspend fun searchMovie(id: Int): List<MovieEntity>

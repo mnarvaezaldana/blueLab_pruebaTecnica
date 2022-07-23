@@ -2,13 +2,13 @@ package com.yucatancorp.bluelab_pruebatecnica.data.local.topRatedMovies
 
 import androidx.room.*
 
-@Entity
+@Entity(tableName = "TopRated", primaryKeys = ["id"])
 data class TopRatedMoviesEntity(
-    val page: Int,
-    val moviesId: MoviesIds?,
-    val totalPages: Int,
-    val totalResults: Int,
-    @PrimaryKey val id: Int? = null
+    @ColumnInfo(name = "page") val page: Int,
+    @ColumnInfo(name = "movies_id") val moviesId: MoviesIds?,
+    @ColumnInfo(name = "total_pages") val totalPages: Int,
+    @ColumnInfo(name = "total_results") val totalResults: Int,
+    @ColumnInfo(name = "id") val id: Int? = null
 )
 
 data class MoviesIds(

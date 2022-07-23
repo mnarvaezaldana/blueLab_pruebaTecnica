@@ -3,7 +3,6 @@ package com.yucatancorp.bluelab_pruebatecnica.di
 import android.app.Application
 import androidx.room.Room
 import com.yucatancorp.bluelab_pruebatecnica.data.local.movies.MoviesDatabase
-import com.yucatancorp.bluelab_pruebatecnica.data.local.topRatedMovies.TopRatedMoviesDatabase
 import com.yucatancorp.bluelab_pruebatecnica.data.remote.MoviesApi
 import com.yucatancorp.bluelab_pruebatecnica.data.repository.MovieRepositoryImplementation
 import com.yucatancorp.bluelab_pruebatecnica.domain.IMoviesRepository
@@ -42,16 +41,6 @@ object AppModule {
             app,
             MoviesDatabase::class.java,
             "moviesDb.db"
-        ).build()
-    }
-
-    @Provides
-    @Singleton
-    fun provideTopRatedMoviesDatabase(app: Application): TopRatedMoviesDatabase {
-        return Room.databaseBuilder(
-            app,
-            TopRatedMoviesDatabase::class.java,
-            "topRatedMoviesDb.db"
         ).build()
     }
 }
