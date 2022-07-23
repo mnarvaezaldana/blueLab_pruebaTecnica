@@ -31,8 +31,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideMoviesRepository(moviesApi: MoviesApi, app: Application): IMoviesRepository {
-        return MovieRepositoryImplementation(moviesApi, app)
+    fun provideMoviesRepository(moviesApi: MoviesApi, db: MoviesDatabase, app: Application): IMoviesRepository {
+        return MovieRepositoryImplementation(moviesApi, db, app)
     }
 
     @Provides
