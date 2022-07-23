@@ -22,6 +22,8 @@ class MovieRepositoryImplementation(
         response.results.forEach { movie ->
             dao.insertMovie(movie.toMovieEntity())
         }
+        val responseMovie = dao.searchMovie(278)
+        Log.e("message", responseMovie.first().customTitle)
     }
 
     override suspend fun getNowPlayingCall() {

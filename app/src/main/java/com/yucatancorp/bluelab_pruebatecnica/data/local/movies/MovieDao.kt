@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.yucatancorp.bluelab_pruebatecnica.data.models.Movie
 
 @Dao
 interface MovieDao {
@@ -12,5 +11,6 @@ interface MovieDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMovie(MovieEntity: MovieEntity)
 
-
+    @Query("SELECT * FROM movies where movie_id LIKE :id")
+     suspend fun searchMovie(id: Int): List<MovieEntity>
 }
