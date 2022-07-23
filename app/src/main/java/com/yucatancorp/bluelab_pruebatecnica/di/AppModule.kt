@@ -9,6 +9,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -20,6 +21,7 @@ object AppModule {
     fun provideMoviesApi(): MoviesApi {
         return Retrofit.Builder()
             .baseUrl(MoviesApi.BASE_URL)
+            .addConverterFactory(MoshiConverterFactory.create())
             .build()
             .create(MoviesApi::class.java)
     }
