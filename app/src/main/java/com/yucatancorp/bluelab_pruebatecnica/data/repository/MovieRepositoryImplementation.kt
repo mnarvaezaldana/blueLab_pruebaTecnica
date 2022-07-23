@@ -10,9 +10,13 @@ class MovieRepositoryImplementation(
     private val appContext: Application
 ): IMoviesRepository {
 
-    override suspend fun doNetworkCall() {
-        val response = moviesApi.doNetworkCall()
+    override suspend fun getTopRatedCall() {
+        val response = moviesApi.getTopRatedCall()
         Log.e("message", response.string())
     }
 
+    override suspend fun getNowPlayingCall() {
+        val response = moviesApi.getNowPlayingCall()
+        Log.e("message", response.string())
+    }
 }

@@ -12,9 +12,10 @@ class MoviesViewModel @Inject constructor(
     private val moviesRepository: IMoviesRepository
 ): ViewModel() {
 
-    fun doNetworkCall() {
+    fun doNetworkCalls() {
         viewModelScope.launch {
-            moviesRepository.doNetworkCall()
+            moviesRepository.getTopRatedCall()
+            moviesRepository.getNowPlayingCall()
         }
     }
 }
