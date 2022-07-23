@@ -11,7 +11,8 @@ class MovieRepositoryImplementation(
 ): IMoviesRepository {
 
     override suspend fun doNetworkCall() {
-        TODO("Not yet implemented")
+        val response = moviesApi.doNetworkCall()
+        Log.e("message", response.string())
     }
 
 }

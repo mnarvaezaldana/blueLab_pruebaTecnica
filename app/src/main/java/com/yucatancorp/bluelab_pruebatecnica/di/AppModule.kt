@@ -19,7 +19,7 @@ object AppModule {
     @Singleton
     fun provideMoviesApi(): MoviesApi {
         return Retrofit.Builder()
-            .baseUrl("")
+            .baseUrl(MoviesApi.BASE_URL)
             .build()
             .create(MoviesApi::class.java)
     }
