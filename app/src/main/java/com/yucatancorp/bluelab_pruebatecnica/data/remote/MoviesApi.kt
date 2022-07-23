@@ -1,6 +1,7 @@
 package com.yucatancorp.bluelab_pruebatecnica.data.remote
 
-import com.yucatancorp.bluelab_pruebatecnica.data.models.TopRatedMovieResponse
+import com.yucatancorp.bluelab_pruebatecnica.data.models.NowPlayingMoviesResponse
+import com.yucatancorp.bluelab_pruebatecnica.data.models.TopRatedMoviesResponse
 import okhttp3.ResponseBody
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -12,14 +13,14 @@ interface MoviesApi {
         @Query("api_key")api_key: String = API_KEY,
         @Query("language")language: String = "en-US",
         @Query("page")page: String = "1"
-    ): TopRatedMovieResponse
+    ): TopRatedMoviesResponse
 
     @GET("now_playing")
     suspend fun getNowPlayingCall(
         @Query("api_key")api_key: String = API_KEY,
         @Query("language")language: String = "en-US",
         @Query("page")page: String = "1"
-    ): ResponseBody
+    ): NowPlayingMoviesResponse
 
     companion object {
         const val API_KEY = "fd2758f5c10e8a34ee4443f212aa86b0"
