@@ -26,6 +26,6 @@ data class NowPlayingMoviesResponse(
 }
 
 data class DatesPlaying(
-    @field:Json(name = "maximun") val maximum: String,
-    @field:Json(name = "minimun") val minimum: String
+    @field:Json(name = "maximun") val maximum: String = "",
+    @field:Json(name = "minimun") val minimum: String = ""
 )

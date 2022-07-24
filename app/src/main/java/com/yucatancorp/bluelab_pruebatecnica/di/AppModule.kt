@@ -2,7 +2,7 @@ package com.yucatancorp.bluelab_pruebatecnica.di
 
 import android.app.Application
 import androidx.room.Room
-import com.yucatancorp.bluelab_pruebatecnica.data.local.movies.MoviesDatabase
+import com.yucatancorp.bluelab_pruebatecnica.data.local.MoviesDatabase
 import com.yucatancorp.bluelab_pruebatecnica.data.remote.MoviesApi
 import com.yucatancorp.bluelab_pruebatecnica.data.repository.MovieRepositoryImplementation
 import com.yucatancorp.bluelab_pruebatecnica.domain.IMoviesRepository

@@ -2,9 +2,13 @@ package com.yucatancorp.bluelab_pruebatecnica.data.local
 
 import com.yucatancorp.bluelab_pruebatecnica.data.local.movies.GenresIds
 import com.yucatancorp.bluelab_pruebatecnica.data.local.movies.MovieEntity
+import com.yucatancorp.bluelab_pruebatecnica.data.local.nowPlayingMovies.MDatesPlaying
+import com.yucatancorp.bluelab_pruebatecnica.data.local.nowPlayingMovies.NowPlayingMoviesEntity
 import com.yucatancorp.bluelab_pruebatecnica.data.local.topRatedMovies.MoviesIds
 import com.yucatancorp.bluelab_pruebatecnica.data.local.topRatedMovies.TopRatedMoviesEntity
+import com.yucatancorp.bluelab_pruebatecnica.data.models.DatesPlaying
 import com.yucatancorp.bluelab_pruebatecnica.data.models.Movie
+import com.yucatancorp.bluelab_pruebatecnica.data.models.NowPlayingMoviesResponse
 import com.yucatancorp.bluelab_pruebatecnica.data.models.TopRatedMoviesResponse
 
 fun Movie.toMovieEntity(): MovieEntity {
@@ -34,6 +38,19 @@ fun TopRatedMoviesResponse.toTopRatedMoviesEntity(): TopRatedMoviesEntity {
     val moviesId = results.map { movie -> movie.movieId }.toCollection(ArrayList())
 
     return TopRatedMoviesEntity(
+        page = page,
+        moviesId = MoviesIds(moviesId),
+        totalPages = totalPages,
+        totalResults = totalResults
+    )
+}
+
+fun NowPlayingMoviesResponse.toNowPlayingMoviesEntity(): NowPlayingMoviesEntity {
+
+    val moviesId = results.map { movie -> movie.movieId }.toCollection(ArrayList())
+
+    return NowPlayingMoviesEntity(
+        dates = MDatesPlaying(dates.maximum, dates.minimum),
         page = page,
         moviesId = MoviesIds(moviesId),
         totalPages = totalPages,
