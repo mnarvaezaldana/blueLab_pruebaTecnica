@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">blueLab_pruebaTecnica</string>
+    <string name="date_key">last_update_date</string>
+    <string name="is_date_updated_key">is_date_updated</string>
 </resources>
