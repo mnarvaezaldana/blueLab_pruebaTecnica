@@ -34,11 +34,18 @@ class MoviesListsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val model = ViewModelProvider(requireActivity())[MoviesViewModel::class.java]
-        model.ids.observe(requireActivity()) { data ->
+        model.topRatedIds.observe(requireActivity()) { data ->
             val moviesAdapter = MoviesAdapter(data)
             val linealLayoutManager = LinearLayoutManager(requireActivity(), RecyclerView.HORIZONTAL, false)
-            binding.rvTopRated.adapter = moviesAdapter
             binding.rvTopRated.layoutManager = linealLayoutManager
+            binding.rvTopRated.adapter = moviesAdapter
+
+        }
+        model.nowPlayingIds.observe(requireActivity()) { data ->
+            val moviesAdapter = MoviesAdapter(data)
+            val linealLayoutManager = LinearLayoutManager(requireActivity(), RecyclerView.HORIZONTAL, false)
+            binding.rvNowPlaying.layoutManager = linealLayoutManager
+            binding.rvNowPlaying.adapter = moviesAdapter
         }
     }
 

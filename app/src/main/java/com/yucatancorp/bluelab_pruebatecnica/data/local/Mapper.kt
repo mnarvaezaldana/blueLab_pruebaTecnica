@@ -1,5 +1,6 @@
 package com.yucatancorp.bluelab_pruebatecnica.data.local
 
+import com.squareup.moshi.Json
 import com.yucatancorp.bluelab_pruebatecnica.data.local.movies.GenresIds
 import com.yucatancorp.bluelab_pruebatecnica.data.local.movies.MovieEntity
 import com.yucatancorp.bluelab_pruebatecnica.data.local.nowPlayingMovies.MDatesPlaying
@@ -19,6 +20,29 @@ fun Movie.toMovieEntity(): MovieEntity {
         isAnAdultFilm = isAnAdultFilm,
         genericFilmImageUrl = genericFilmImageUrl,
         genresIds = GenresIds(genresIdsArrayList),
+        movieId = movieId,
+        originalLanguage = originalLanguage,
+        originalTitle = originalTitle,
+        overview = overview,
+        popularity = popularity,
+        posterFilmImageUrl = posterFilmImageUrl,
+        releaseDate = releaseDate,
+        customTitle = customTitle,
+        isVideo = isVideo,
+        averageVote = averageVote,
+        voteCount = voteCount,
+    )
+}
+
+
+fun MovieEntity.toMovie(): Movie {
+
+    val genreIds = genresIds.genreIds.toIntArray()
+
+    return Movie(
+        isAnAdultFilm = isAnAdultFilm,
+        genericFilmImageUrl = genericFilmImageUrl,
+        genreIds = genreIds,
         movieId = movieId,
         originalLanguage = originalLanguage,
         originalTitle = originalTitle,
