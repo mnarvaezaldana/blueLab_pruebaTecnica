@@ -12,5 +12,5 @@ interface MovieDao {
     suspend fun insertMovie(movieEntity: MovieEntity)
 
     @Query("SELECT * FROM movies where movie_id LIKE :id")
-     suspend fun searchMovie(id: Int): List<MovieEntity>
+    suspend fun searchMovie(id: Int): List<MovieEntity>
 }

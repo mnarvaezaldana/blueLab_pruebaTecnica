@@ -14,8 +14,7 @@ class MoviesViewModel @Inject constructor(
 
     fun doNetworkCalls() {
         viewModelScope.launch {
-            moviesRepository.getTopRatedCall()
-            moviesRepository.getNowPlayingCall()
+            moviesRepository.performTasks()
         }
     }
 }
