@@ -31,7 +31,6 @@ class MovieRepositoryImplementation(
             getTopRatedCall()
             getNowPlayingCall()
         }
-        getTopRatedQuery()
         getNowPlayingQuery()
     }
 
@@ -43,10 +42,8 @@ class MovieRepositoryImplementation(
         }
     }
 
-    override suspend fun getTopRatedQuery() {
-        topRatedMoviesDao.getTopRatedMoviesIds().moviesIds.forEach {
-            //TODO - get Movie from ID and store in array
-        }
+    override suspend fun getTopRatedQuery(): ArrayList<Int> {
+        return topRatedMoviesDao.getTopRatedMoviesIds().moviesIds
     }
 
     override suspend fun getNowPlayingCall() {

@@ -1,4 +1,4 @@
-package com.yucatancorp.bluelab_pruebatecnica.view
+package com.yucatancorp.bluelab_pruebatecnica.view.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/moviesListsFragment"
-        android:name="com.yucatancorp.bluelab_pruebatecnica.view.MoviesListsFragment"
+        android:name="com.yucatancorp.bluelab_pruebatecnica.view.fragments.MoviesListsFragment"
         android:label="MoviesListsFragment" >
         <action
             android:id="@+id/action_moviesListsFragment_to_movieDescriptionFragment"
