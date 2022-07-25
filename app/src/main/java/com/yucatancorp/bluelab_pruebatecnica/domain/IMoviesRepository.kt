@@ -8,4 +8,5 @@ interface IMoviesRepository {
     suspend fun getTopRatedQuery(): ArrayList<Movie>
     suspend fun getNowPlayingCall()
     suspend fun getNowPlayingQuery(): ArrayList<Movie>
+    suspend fun getMovie(movieId: Int): Movie?
 }

@@ -6,9 +6,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import com.yucatancorp.bluelab_pruebatecnica.R
+import com.yucatancorp.bluelab_pruebatecnica.data.models.Movie
 import com.yucatancorp.bluelab_pruebatecnica.view.MainActivity
+import com.yucatancorp.bluelab_pruebatecnica.viewModel.MoviesViewModel
 
 /**
  * A simple [Fragment] subclass.
@@ -18,11 +21,14 @@ import com.yucatancorp.bluelab_pruebatecnica.view.MainActivity
 class MovieDescriptionFragment : Fragment() {
 
     private var movieId: Int? = null
+    private var movie: Movie? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val model = ViewModelProvider(requireActivity())[MoviesViewModel::class.java]
         arguments?.let {
-            movieId = it.getInt("movieId")
+            model.getMovieQuery(it.getInt("movieId"))
+            movie = model.movie
         }
     }
 

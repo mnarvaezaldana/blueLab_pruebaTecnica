@@ -3,7 +3,6 @@ package com.yucatancorp.bluelab_pruebatecnica.data.repository
 import android.app.Application
 import android.content.Context
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import com.yucatancorp.bluelab_pruebatecnica.R
 import com.yucatancorp.bluelab_pruebatecnica.data.local.*
@@ -40,16 +39,13 @@ class MovieRepositoryImplementation(
     override suspend fun getTopRatedQuery(): ArrayList<Movie> {
         val arrayOfMovies = arrayListOf<Movie>()
         topRatedMoviesDao.getTopRatedMoviesIds().moviesIds.forEach { id ->
-            moviesDao.searchMovie(id.toString(), "1")?.let {
-                    movieEntity -> arrayOfMovies.add(movieEntity.toMovie())
-            }
+            getMovie(id)?.let { movieEntity -> arrayOfMovies.add(movieEntity) }
         }
         return arrayOfMovies
     }
 
     override suspend fun getNowPlayingCall() {
         val response = moviesApi.getNowPlayingCall()
-        Log.e("messagef", response.results.toString()?:"fdfdfdfs")
         nowPlayingMoviesDao.insertNowPlaying(response.toNowPlayingMoviesEntity())
         response.results.forEach { movie ->
             moviesDao.insertMovie(movie.toMovieEntity())
@@ -59,12 +55,15 @@ class MovieRepositoryImplementation(
     override suspend fun getNowPlayingQuery(): ArrayList<Movie> {
         val arrayOfMovies = arrayListOf<Movie>()
         nowPlayingMoviesDao.getNowPlayingMoviesIds().moviesIds.forEach { id ->
-            moviesDao.searchMovie(id.toString(), "1")?.let {
-                    movieEntity -> arrayOfMovies.add(movieEntity.toMovie())
-            }
+            getMovie(id)?.let { movieEntity -> arrayOfMovies.add(movieEntity) }
         }
         return arrayOfMovies
     }
+
+    override suspend fun getMovie(movieId: Int): Movie? {
+        return moviesDao.searchMovie(movieId.toString(), "1")?.toMovie()
+    }
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun isDateUpdated(): Boolean {
