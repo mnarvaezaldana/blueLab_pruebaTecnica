@@ -15,6 +15,7 @@ import com.yucatancorp.bluelab_pruebatecnica.R
 import com.yucatancorp.bluelab_pruebatecnica.databinding.FragmentMoviesListsBinding
 import com.yucatancorp.bluelab_pruebatecnica.view.MoviesAdapter
 import com.yucatancorp.bluelab_pruebatecnica.viewModel.MoviesViewModel
+import kotlinx.coroutines.*
 
 /**
  * A simple [Fragment] subclass.
@@ -25,6 +26,8 @@ class MoviesListsFragment : Fragment() {
 
     private var _binding: FragmentMoviesListsBinding? = null
     private val binding get() = _binding!!
+    private val coroutineScope = CoroutineScope(Dispatchers.Main + CoroutineName("movieCoroutine"))
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,14 +44,14 @@ class MoviesListsFragment : Fragment() {
         model.topRatedIds.observe(requireActivity()) { data ->
             val moviesAdapter = MoviesAdapter(data)
             val linearLayoutManager = LinearLayoutManager(requireActivity(), RecyclerView.HORIZONTAL, false)
-            moviesAdapter.setOnClickOnMovieThumbnail { id, name -> navigateToMovieDescription(id, name) }
+            moviesAdapter.setOnClickOnMovieThumbnail { id, name -> navigateToMovieDescription(id, name, model) }
             binding.rvTopRated.layoutManager = linearLayoutManager
             binding.rvTopRated.adapter = moviesAdapter
         }
         model.nowPlayingIds.observe(requireActivity()) { data ->
             val moviesAdapter = MoviesAdapter(data)
             val linearLayoutManager = LinearLayoutManager(requireActivity(), RecyclerView.HORIZONTAL, false)
-            moviesAdapter.setOnClickOnMovieThumbnail { id, name -> navigateToMovieDescription(id, name) }
+            moviesAdapter.setOnClickOnMovieThumbnail { id, name -> navigateToMovieDescription(id, name, model) }
             binding.rvNowPlaying.layoutManager = linearLayoutManager
             binding.rvNowPlaying.adapter = moviesAdapter
         }
@@ -58,8 +61,11 @@ class MoviesListsFragment : Fragment() {
         binding.tvLastUpdateLabel.text = "$dateUpdateLabel $dateLatestUpdate"
     }
 
-    private fun navigateToMovieDescription(id: Int, name: String) {
-        findNavController().navigate(R.id.action_moviesListsFragment_to_movieDescriptionFragment, bundleOf("movieId" to id, "movieName" to name))
+    private fun navigateToMovieDescription(id: Int, name: String?, model: MoviesViewModel) {
+        coroutineScope.launch {
+            val movie = withContext(Dispatchers.IO) { model.getMovieQuery(id) }
+            findNavController().navigate(R.id.action_moviesListsFragment_to_movieDescriptionFragment, bundleOf("movie" to movie, "movieName" to name))
+        }
     }
 
     override fun onDestroyView() {

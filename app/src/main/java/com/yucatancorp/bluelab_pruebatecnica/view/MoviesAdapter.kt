@@ -11,7 +11,7 @@ import com.bumptech.glide.Glide
 import com.yucatancorp.bluelab_pruebatecnica.R
 import com.yucatancorp.bluelab_pruebatecnica.data.models.Movie
 
-typealias OnClickOnMovie = (Int, String) -> Unit
+typealias OnClickOnMovie = (Int, String?) -> Unit
 class MoviesAdapter(private val movies: List<Movie>): RecyclerView.Adapter<MoviesAdapter.MoviesListViewHolder>() {
 
     private var viewGroup: ViewGroup? = null
@@ -48,7 +48,7 @@ class MoviesAdapter(private val movies: List<Movie>): RecyclerView.Adapter<Movie
             tvOriginalTitle.text = movie.originalTitle
             tvOriginalTitle.visibility = if (movie.customTitle == movie.originalTitle) { View.GONE } else { View.VISIBLE }
             Glide.with(viewGroup.context)
-                .load(movie.posterFilmImageUrl.getImageUrl())
+                .load(movie.posterFilmImageUrl?.getImageUrl())
                 .into(ivPoster)
             cvMovie.setOnClickListener { onClickOnMovie?.invoke(movie.movieId, movie.customTitle) }
         }

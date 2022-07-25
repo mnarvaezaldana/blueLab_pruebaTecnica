@@ -17,7 +17,6 @@ class MoviesViewModel @Inject constructor(
 
     val topRatedIds = MutableLiveData<ArrayList<Movie>>()
     val nowPlayingIds = MutableLiveData<ArrayList<Movie>>()
-    var movie: Movie? = null
 
     fun doNetworkCalls() {
         viewModelScope.launch {
@@ -27,9 +26,7 @@ class MoviesViewModel @Inject constructor(
         }
     }
 
-    fun getMovieQuery(movieId: Int) {
-        viewModelScope.launch {
-            movie = moviesRepository.getMovie(movieId)
-        }
+    suspend fun getMovieQuery(movieId: Int): Movie? {
+        return moviesRepository.getMovie(movieId)
     }
 }
