@@ -36,15 +36,15 @@ class MoviesListsFragment : Fragment() {
         val model = ViewModelProvider(requireActivity())[MoviesViewModel::class.java]
         model.topRatedIds.observe(requireActivity()) { data ->
             val moviesAdapter = MoviesAdapter(data)
-            val linealLayoutManager = LinearLayoutManager(requireActivity(), RecyclerView.HORIZONTAL, false)
-            binding.rvTopRated.layoutManager = linealLayoutManager
+            val linearLayoutManager = LinearLayoutManager(requireActivity(), RecyclerView.HORIZONTAL, false)
+            binding.rvTopRated.layoutManager = linearLayoutManager
             binding.rvTopRated.adapter = moviesAdapter
 
         }
         model.nowPlayingIds.observe(requireActivity()) { data ->
             val moviesAdapter = MoviesAdapter(data)
-            val linealLayoutManager = LinearLayoutManager(requireActivity(), RecyclerView.HORIZONTAL, false)
-            binding.rvNowPlaying.layoutManager = linealLayoutManager
+            val linearLayoutManager = LinearLayoutManager(requireActivity(), RecyclerView.HORIZONTAL, false)
+            binding.rvNowPlaying.layoutManager = linearLayoutManager
             binding.rvNowPlaying.adapter = moviesAdapter
         }
     }
