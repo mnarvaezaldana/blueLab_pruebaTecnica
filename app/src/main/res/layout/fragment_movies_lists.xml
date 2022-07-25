@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:text="@string/hello_blank_fragment"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -27,6 +28,7 @@
         android:id="@+id/tv_now_playing_label"
         android:layout_width="match_parent"
         android:layout_height="30dp"
+        android:gravity="center"
         android:text="@string/hello_blank_fragment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,6 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:layout_marginTop="1dp"
+        android:gravity="center"
         android:text="@string/hello_blank_fragment"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

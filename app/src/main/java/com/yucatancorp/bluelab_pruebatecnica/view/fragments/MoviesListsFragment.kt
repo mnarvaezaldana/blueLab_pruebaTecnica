@@ -1,5 +1,6 @@
 package com.yucatancorp.bluelab_pruebatecnica.view.fragments
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -51,6 +52,10 @@ class MoviesListsFragment : Fragment() {
             binding.rvNowPlaying.layoutManager = linearLayoutManager
             binding.rvNowPlaying.adapter = moviesAdapter
         }
+        val sharedPref = requireActivity().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE)
+        val dateLatestUpdate = sharedPref.getString(getString(R.string.date_key), "")
+        val dateUpdateLabel = requireActivity().getString(R.string.last_update_label)
+        binding.tvLastUpdateLabel.text = "$dateUpdateLabel $dateLatestUpdate"
     }
 
     private fun navigateToMovieDescription(id: Int, name: String) {
