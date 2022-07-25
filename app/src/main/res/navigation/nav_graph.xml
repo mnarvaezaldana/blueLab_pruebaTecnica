@@ -16,7 +16,11 @@
 
     <fragment
         android:id="@+id/movieDescriptionFragment"
-        android:name="com.yucatancorp.bluelab_pruebatecnica.view.MovieDescriptionFragment"
-        android:label="fragment_movie_description"
-        tools:layout="@layout/fragment_movie_description" />
+        android:name="com.yucatancorp.bluelab_pruebatecnica.view.fragments.MovieDescriptionFragment"
+        android:label="{movieName}"
+        tools:layout="@layout/fragment_movie_description">
+        <argument
+            android:name="movieName"
+            app:argType="string"/>
+    </fragment>
 </navigation>

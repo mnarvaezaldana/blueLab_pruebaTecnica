@@ -5,14 +5,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.yucatancorp.bluelab_pruebatecnica.R
 import com.yucatancorp.bluelab_pruebatecnica.data.models.Movie
 
+typealias OnClickOnMovie = (Int, String) -> Unit
 class MoviesAdapter(private val movies: List<Movie>): RecyclerView.Adapter<MoviesAdapter.MoviesListViewHolder>() {
 
     var viewGroup: ViewGroup? = null
+    var onClickOnMovie: OnClickOnMovie? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesListViewHolder {
         viewGroup = parent
@@ -29,8 +32,13 @@ class MoviesAdapter(private val movies: List<Movie>): RecyclerView.Adapter<Movie
         return movies.size
     }
 
+    fun setOnClickOnMovieThumbnail(onClickOnMovie: OnClickOnMovie) {
+        this.onClickOnMovie = onClickOnMovie
+    }
+
     inner class MoviesListViewHolder(view: View): RecyclerView.ViewHolder(view) {
 
+        private var CVmovie: CardView = view.findViewById(R.id.cv_movie)
         private var tvCustomTitle: TextView = view.findViewById(R.id.tv_custom_title)
         private var tvOriginalTitle: TextView = view.findViewById(R.id.tv_title)
         private var ivPoster: ImageView = view.findViewById(R.id.iv_movie_image)
@@ -42,6 +50,7 @@ class MoviesAdapter(private val movies: List<Movie>): RecyclerView.Adapter<Movie
             Glide.with(viewGroup.context)
                 .load(movie.posterFilmImageUrl.getImageUrl())
                 .into(ivPoster)
+            CVmovie.setOnClickListener { onClickOnMovie?.invoke(movie.movieId, movie.customTitle) }
         }
 
         private fun String.getImageUrl(): String {
