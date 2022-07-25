@@ -14,7 +14,7 @@ import com.yucatancorp.bluelab_pruebatecnica.data.models.Movie
 typealias OnClickOnMovie = (Int, String) -> Unit
 class MoviesAdapter(private val movies: List<Movie>): RecyclerView.Adapter<MoviesAdapter.MoviesListViewHolder>() {
 
-    var viewGroup: ViewGroup? = null
+    private var viewGroup: ViewGroup? = null
     var onClickOnMovie: OnClickOnMovie? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesListViewHolder {
@@ -38,7 +38,7 @@ class MoviesAdapter(private val movies: List<Movie>): RecyclerView.Adapter<Movie
 
     inner class MoviesListViewHolder(view: View): RecyclerView.ViewHolder(view) {
 
-        private var CVmovie: CardView = view.findViewById(R.id.cv_movie)
+        private var cvMovie: CardView = view.findViewById(R.id.cv_movie)
         private var tvCustomTitle: TextView = view.findViewById(R.id.tv_custom_title)
         private var tvOriginalTitle: TextView = view.findViewById(R.id.tv_title)
         private var ivPoster: ImageView = view.findViewById(R.id.iv_movie_image)
@@ -50,7 +50,7 @@ class MoviesAdapter(private val movies: List<Movie>): RecyclerView.Adapter<Movie
             Glide.with(viewGroup.context)
                 .load(movie.posterFilmImageUrl.getImageUrl())
                 .into(ivPoster)
-            CVmovie.setOnClickListener { onClickOnMovie?.invoke(movie.movieId, movie.customTitle) }
+            cvMovie.setOnClickListener { onClickOnMovie?.invoke(movie.movieId, movie.customTitle) }
         }
 
         private fun String.getImageUrl(): String {
