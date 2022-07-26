@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -18,7 +19,6 @@ import com.yucatancorp.bluelab_pruebatecnica.databinding.FragmentMoviesListsBind
 import com.yucatancorp.bluelab_pruebatecnica.view.MoviesAdapter
 import com.yucatancorp.bluelab_pruebatecnica.viewModel.MoviesViewModel
 import kotlinx.coroutines.*
-
 
 /**
  * A simple [Fragment] subclass.
@@ -46,8 +46,8 @@ class MoviesListsFragment : Fragment() {
 
         val model = ViewModelProvider(requireActivity())[MoviesViewModel::class.java]
 
-        initializeAdapter(binding.rvTopRated, model, model.topRatedIds) { downloadMoreTopRatedMovies(model) }
-        initializeAdapter(binding.rvNowPlaying, model, model.nowPlayingIds) { downloadMoreNowPlayingMovies(model) }
+        initializeRecyclerview(requireActivity(), binding.rvTopRated, model, model.topRatedIds) { downloadMoreTopRatedMovies(model) }
+        initializeRecyclerview(requireActivity(), binding.rvNowPlaying, model, model.nowPlayingIds) { downloadMoreNowPlayingMovies(model) }
 
         val sharedPref = requireActivity().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE)
         val dateLatestUpdate = sharedPref.getString(getString(R.string.date_key), "")
@@ -55,19 +55,35 @@ class MoviesListsFragment : Fragment() {
         binding.tvLastUpdateLabel.text = "$dateUpdateLabel $dateLatestUpdate"
     }
 
-    private fun initializeAdapter(rv: RecyclerView, model: MoviesViewModel, mutableLiveData: MutableLiveData<ArrayList<Movie>>, onFinalItemsReached: () -> Unit) {
+    private fun initializeRecyclerview(fragmentActivity: FragmentActivity, rv: RecyclerView, model: MoviesViewModel, mutableLiveData: MutableLiveData<ArrayList<Movie>>, onFinalItemsReached: () -> Unit) {
+        val moviesAdapter = createAdapter(fragmentActivity, mutableLiveData)
+        setRVProperties(fragmentActivity, rv, moviesAdapter, onFinalItemsReached)
+        moviesAdapter.setOnClickOnMovieThumbnail { id, name -> navigateToMovieDescription(id, name, model) }
+    }
+
+    private fun createAdapter(fragmentActivity: FragmentActivity, mutableLiveData: MutableLiveData<ArrayList<Movie>>): MoviesAdapter {
         val moviesAdapter = MoviesAdapter()
-        mutableLiveData.observe(requireActivity()) { data ->
+        mutableLiveData.observe(fragmentActivity) { data ->
             moviesAdapter.addDataset(data)
         }
-        val linearLayoutManager = LinearLayoutManager(requireActivity(), RecyclerView.HORIZONTAL, false)
-        moviesAdapter.setOnClickOnMovieThumbnail { id, name -> navigateToMovieDescription(id, name, model) }
-        rv.layoutManager = linearLayoutManager
+        return moviesAdapter
+    }
+
+    private fun setRVProperties(context: Context, rv: RecyclerView, moviesAdapter: MoviesAdapter,  onFinalItemsReached: () -> Unit) {
+        rv.layoutManager = mLinearLayoutManager(context)
         rv.adapter = moviesAdapter
+        setOnScrollListenerToRecyclerview(rv, moviesAdapter, onFinalItemsReached)
+    }
+
+    private fun mLinearLayoutManager(context: Context): LinearLayoutManager {
+        return LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+    }
+
+    private fun setOnScrollListenerToRecyclerview(rv: RecyclerView, moviesAdapter: MoviesAdapter, onFinalItemsReached: () -> Unit) {
         rv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-                if (linearLayoutManager.findLastCompletelyVisibleItemPosition() >= moviesAdapter.movies.size - 3 ) {
+                if ((rv.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() >= moviesAdapter.movies.size - 3 ) {
                     onFinalItemsReached.invoke()
                 }
             }
