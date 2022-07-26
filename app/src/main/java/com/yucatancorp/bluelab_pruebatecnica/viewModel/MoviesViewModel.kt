@@ -6,8 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.yucatancorp.bluelab_pruebatecnica.data.models.Movie
 import com.yucatancorp.bluelab_pruebatecnica.domain.IMoviesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

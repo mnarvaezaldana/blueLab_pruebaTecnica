@@ -34,6 +34,9 @@ class MoviesListsFragment : Fragment() {
     private val coroutineScope = CoroutineScope(Dispatchers.Main + CoroutineName("movieCoroutine"))
     private var numberPageTopRated = 1
     private var numberPageNowPlaying = 1
+    var tempTopRatedMovies = arrayListOf<Movie>()
+    var tempNowPlayingMovies = arrayListOf<Movie>()
+    var isSearching: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -121,10 +124,6 @@ class MoviesListsFragment : Fragment() {
 
         })
     }
-
-    var tempTopRatedMovies = arrayListOf<Movie>()
-    var tempNowPlayingMovies = arrayListOf<Movie>()
-    var isSearching: Boolean = false
 
     private fun downloadMoreTopRatedMovies(model: MoviesViewModel) {
         numberPageTopRated++

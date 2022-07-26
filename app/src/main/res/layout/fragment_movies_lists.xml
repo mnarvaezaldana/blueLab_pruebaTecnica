@@ -18,9 +18,9 @@
         android:id="@+id/tv_top_rated_label"
         android:layout_width="match_parent"
         android:layout_height="30dp"
+        android:gravity="center"
         android:text="@string/top_rated"
         android:textStyle="bold"
-        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/et_filter" />
