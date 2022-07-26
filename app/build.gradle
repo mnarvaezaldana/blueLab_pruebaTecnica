@@ -10,8 +10,7 @@ android {
 
     android.applicationVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "marcosNarvaez-Final.apk"
-
+            outputFileName = "FinalAPK-marcosNarvaez.apk"
         }
     }
 
