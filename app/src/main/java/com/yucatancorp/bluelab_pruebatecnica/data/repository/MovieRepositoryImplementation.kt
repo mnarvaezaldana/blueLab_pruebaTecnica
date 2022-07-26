@@ -6,9 +6,13 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.yucatancorp.bluelab_pruebatecnica.R
 import com.yucatancorp.bluelab_pruebatecnica.data.local.*
+import com.yucatancorp.bluelab_pruebatecnica.data.local.topRatedMovies.MoviesIds
 import com.yucatancorp.bluelab_pruebatecnica.data.models.Movie
+import com.yucatancorp.bluelab_pruebatecnica.data.models.TopRatedMoviesResponse
 import com.yucatancorp.bluelab_pruebatecnica.data.remote.MoviesApi
 import com.yucatancorp.bluelab_pruebatecnica.domain.IMoviesRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class MovieRepositoryImplementation(
     private val moviesApi: MoviesApi,
@@ -28,8 +32,8 @@ class MovieRepositoryImplementation(
         }
     }
 
-    override suspend fun getTopRatedCall() {
-        val response = moviesApi.getTopRatedCall()
+    override suspend fun getTopRatedCall(pageNumber: String) {
+        val response = moviesApi.getTopRatedCall(page = pageNumber)
         topRatedMoviesDao.insertTopRated(response.toTopRatedMoviesEntity())
         response.results.forEach { movie ->
             moviesDao.insertMovie(movie.toMovieEntity())
@@ -38,14 +42,16 @@ class MovieRepositoryImplementation(
 
     override suspend fun getTopRatedQuery(): ArrayList<Movie> {
         val arrayOfMovies = arrayListOf<Movie>()
-        topRatedMoviesDao.getTopRatedMoviesIds().moviesIds.forEach { id ->
-            getMovie(id)?.let { movieEntity -> arrayOfMovies.add(movieEntity) }
+        topRatedMoviesDao.getTopRatedMoviesIds().forEach { moviesIds ->
+            moviesIds.moviesIds.forEach { id ->
+                getMovie(id)?.let { movieEntity -> arrayOfMovies.add(movieEntity) }
+            }
         }
         return arrayOfMovies
     }
 
-    override suspend fun getNowPlayingCall() {
-        val response = moviesApi.getNowPlayingCall()
+    override suspend fun getNowPlayingCall(pageNumber: String) {
+        val response = moviesApi.getNowPlayingCall(page = pageNumber)
         nowPlayingMoviesDao.insertNowPlaying(response.toNowPlayingMoviesEntity())
         response.results.forEach { movie ->
             moviesDao.insertMovie(movie.toMovieEntity())
@@ -54,8 +60,10 @@ class MovieRepositoryImplementation(
 
     override suspend fun getNowPlayingQuery(): ArrayList<Movie> {
         val arrayOfMovies = arrayListOf<Movie>()
-        nowPlayingMoviesDao.getNowPlayingMoviesIds().moviesIds.forEach { id ->
-            getMovie(id)?.let { movieEntity -> arrayOfMovies.add(movieEntity) }
+        nowPlayingMoviesDao.getNowPlayingMoviesIds().forEach { moviesIds ->
+            moviesIds.moviesIds.forEach { id ->
+                getMovie(id)?.let { movieEntity -> arrayOfMovies.add(movieEntity) }
+            }
         }
         return arrayOfMovies
     }

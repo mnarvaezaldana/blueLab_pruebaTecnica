@@ -10,6 +10,7 @@
         android:id="@+id/iv_movie_main_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="200dp"
         android:layout_marginBottom="250dp"
         android:contentDescription="movie"
         app:layout_constraintTop_toTopOf="parent"

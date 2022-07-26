@@ -13,5 +13,5 @@ interface NowPlayingMoviesDao {
     suspend fun insertNowPlaying(nowPlayingMoviesEntity: NowPlayingMoviesEntity)
 
     @Query("SELECT movies_id FROM nowPlaying")
-    suspend fun getNowPlayingMoviesIds(): MoviesIds
+    suspend fun getNowPlayingMoviesIds(): List<MoviesIds>
 }

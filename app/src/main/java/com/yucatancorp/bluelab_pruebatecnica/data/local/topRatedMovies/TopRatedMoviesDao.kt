@@ -12,5 +12,5 @@ interface TopRatedMoviesDao {
     suspend fun insertTopRated(topRatedMoviesEntity: TopRatedMoviesEntity)
 
     @Query("SELECT movies_id FROM topRated")
-    suspend fun getTopRatedMoviesIds(): MoviesIds
+    suspend fun getTopRatedMoviesIds(): List<MoviesIds>
 }

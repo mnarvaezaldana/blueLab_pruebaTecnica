@@ -1,12 +1,13 @@
 package com.yucatancorp.bluelab_pruebatecnica.viewModel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yucatancorp.bluelab_pruebatecnica.data.models.Movie
 import com.yucatancorp.bluelab_pruebatecnica.domain.IMoviesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,5 +29,19 @@ class MoviesViewModel @Inject constructor(
 
     suspend fun getMovieQuery(movieId: Int): Movie? {
         return moviesRepository.getMovie(movieId)
+    }
+
+    fun downloadMoreTopRatedMovies(pageNumber: String) {
+        viewModelScope.launch {
+            moviesRepository.getTopRatedCall(pageNumber)
+            topRatedIds.postValue(moviesRepository.getTopRatedQuery())
+        }
+    }
+
+    fun downloadMoreNowPlayingMovies(pageNumber: String) {
+        viewModelScope.launch {
+            moviesRepository.getNowPlayingCall(pageNumber)
+            nowPlayingIds.postValue(moviesRepository.getNowPlayingQuery())
+        }
     }
 }

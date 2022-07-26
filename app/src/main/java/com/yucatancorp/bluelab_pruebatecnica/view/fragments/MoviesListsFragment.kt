@@ -2,11 +2,11 @@ package com.yucatancorp.bluelab_pruebatecnica.view.fragments
 
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,6 +16,7 @@ import com.yucatancorp.bluelab_pruebatecnica.databinding.FragmentMoviesListsBind
 import com.yucatancorp.bluelab_pruebatecnica.view.MoviesAdapter
 import com.yucatancorp.bluelab_pruebatecnica.viewModel.MoviesViewModel
 import kotlinx.coroutines.*
+
 
 /**
  * A simple [Fragment] subclass.
@@ -27,6 +28,8 @@ class MoviesListsFragment : Fragment() {
     private var _binding: FragmentMoviesListsBinding? = null
     private val binding get() = _binding!!
     private val coroutineScope = CoroutineScope(Dispatchers.Main + CoroutineName("movieCoroutine"))
+    private var numberPageTopRated = 1
+    private var numberPageNowPlaying = 1
 
 
     override fun onCreateView(
@@ -47,6 +50,15 @@ class MoviesListsFragment : Fragment() {
             moviesAdapter.setOnClickOnMovieThumbnail { id, name -> navigateToMovieDescription(id, name, model) }
             binding.rvTopRated.layoutManager = linearLayoutManager
             binding.rvTopRated.adapter = moviesAdapter
+            binding.rvTopRated.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    if (linearLayoutManager.findLastCompletelyVisibleItemPosition() >= data.size - 3) {
+                        numberPageTopRated++
+                        model.downloadMoreTopRatedMovies(numberPageTopRated.toString())
+                    }
+                }
+            })
         }
         model.nowPlayingIds.observe(requireActivity()) { data ->
             val moviesAdapter = MoviesAdapter(data)
@@ -54,6 +66,15 @@ class MoviesListsFragment : Fragment() {
             moviesAdapter.setOnClickOnMovieThumbnail { id, name -> navigateToMovieDescription(id, name, model) }
             binding.rvNowPlaying.layoutManager = linearLayoutManager
             binding.rvNowPlaying.adapter = moviesAdapter
+            binding.rvNowPlaying.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    if (linearLayoutManager.findLastCompletelyVisibleItemPosition() >= data.size - 3) {
+                        numberPageNowPlaying++
+                        model.downloadMoreNowPlayingMovies(numberPageNowPlaying.toString())
+                    }
+                }
+            })
         }
         val sharedPref = requireActivity().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE)
         val dateLatestUpdate = sharedPref.getString(getString(R.string.date_key), "")
