@@ -2,6 +2,8 @@ package com.yucatancorp.bluelab_pruebatecnica.view.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,8 +48,8 @@ class MoviesListsFragment : Fragment() {
 
         val model = ViewModelProvider(requireActivity())[MoviesViewModel::class.java]
 
-        initializeRecyclerview(requireActivity(), binding.rvTopRated, model, model.topRatedIds) { downloadMoreTopRatedMovies(model) }
-        initializeRecyclerview(requireActivity(), binding.rvNowPlaying, model, model.nowPlayingIds) { downloadMoreNowPlayingMovies(model) }
+        initializeRecyclerview(requireActivity(), binding.rvTopRated, model, model.topRatedIds, tempTopRatedMovies) { downloadMoreTopRatedMovies(model) }
+        initializeRecyclerview(requireActivity(), binding.rvNowPlaying, model, model.nowPlayingIds, tempNowPlayingMovies) { downloadMoreNowPlayingMovies(model) }
 
         val sharedPref = requireActivity().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE)
         val dateLatestUpdate = sharedPref.getString(getString(R.string.date_key), "")
@@ -55,31 +57,38 @@ class MoviesListsFragment : Fragment() {
         binding.tvLastUpdateLabel.text = "$dateUpdateLabel $dateLatestUpdate"
     }
 
-    private fun initializeRecyclerview(fragmentActivity: FragmentActivity, rv: RecyclerView, model: MoviesViewModel, mutableLiveData: MutableLiveData<ArrayList<Movie>>, onFinalItemsReached: () -> Unit) {
-        val moviesAdapter = createAdapter(fragmentActivity, mutableLiveData)
-        setRVProperties(fragmentActivity, rv, moviesAdapter, onFinalItemsReached)
+    private fun initializeRecyclerview(fragmentActivity: FragmentActivity, rv: RecyclerView, model: MoviesViewModel, mutableLiveData: MutableLiveData<ArrayList<Movie>>, tempMovies: ArrayList<Movie>, onFinalItemsReached: () -> Unit) {
+        val moviesAdapter = createAdapter(fragmentActivity, tempMovies, mutableLiveData)
+        setRVProperties(fragmentActivity, rv, moviesAdapter, tempMovies, onFinalItemsReached)
         moviesAdapter.setOnClickOnMovieThumbnail { id, name -> navigateToMovieDescription(id, name, model) }
     }
 
-    private fun createAdapter(fragmentActivity: FragmentActivity, mutableLiveData: MutableLiveData<ArrayList<Movie>>): MoviesAdapter {
+    private fun addTempMovies(movies: ArrayList<Movie>): ArrayList<Movie> {
+        return ArrayList(movies.distinct())
+    }
+
+    private fun createAdapter(fragmentActivity: FragmentActivity, tempMovies: ArrayList<Movie>, mutableLiveData: MutableLiveData<ArrayList<Movie>>): MoviesAdapter {
         val moviesAdapter = MoviesAdapter()
         mutableLiveData.observe(fragmentActivity) { data ->
-            moviesAdapter.addDataset(data)
+            if (!isSearching) {
+                moviesAdapter.addDataset(data)
+            }
+            tempMovies.addAll(addTempMovies(data))
         }
         return moviesAdapter
     }
 
-    private fun setRVProperties(context: Context, rv: RecyclerView, moviesAdapter: MoviesAdapter,  onFinalItemsReached: () -> Unit) {
+    private fun setRVProperties(context: Context, rv: RecyclerView, moviesAdapter: MoviesAdapter, tempMovies: ArrayList<Movie>, onFinalItemsReached: () -> Unit) {
         rv.layoutManager = mLinearLayoutManager(context)
         rv.adapter = moviesAdapter
-        setOnScrollListenerToRecyclerview(rv, moviesAdapter, onFinalItemsReached)
+        setOnScrollListenerToRecyclerview(rv, moviesAdapter, tempMovies, onFinalItemsReached)
     }
 
     private fun mLinearLayoutManager(context: Context): LinearLayoutManager {
         return LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
     }
 
-    private fun setOnScrollListenerToRecyclerview(rv: RecyclerView, moviesAdapter: MoviesAdapter, onFinalItemsReached: () -> Unit) {
+    private fun setOnScrollListenerToRecyclerview(rv: RecyclerView, moviesAdapter: MoviesAdapter, tempMovies: ArrayList<Movie>, onFinalItemsReached: () -> Unit) {
         rv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
@@ -88,7 +97,34 @@ class MoviesListsFragment : Fragment() {
                 }
             }
         })
+        binding.etFilter.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                isSearching = p0.toString().isNotEmpty()
+                val filteredList = arrayListOf<Movie>()
+                tempMovies.forEach {
+                    if ((it.customTitle?.contains(p0.toString(), true) == true) || (it.originalTitle?.contains(p0.toString(), true) == true)) {
+                        filteredList.add(it);
+                    }
+                }
+                val lastMovieList = filteredList.distinct()
+                moviesAdapter.movies = ArrayList(lastMovieList)
+                moviesAdapter.notifyDataSetChanged()
+            }
+
+        })
     }
+
+    var tempTopRatedMovies = arrayListOf<Movie>()
+    var tempNowPlayingMovies = arrayListOf<Movie>()
+    var isSearching: Boolean = false
 
     private fun downloadMoreTopRatedMovies(model: MoviesViewModel) {
         numberPageTopRated++

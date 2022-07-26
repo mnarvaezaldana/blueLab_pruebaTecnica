@@ -37,7 +37,8 @@ class MoviesAdapter: RecyclerView.Adapter<MoviesAdapter.MoviesListViewHolder>() 
         this.onClickOnMovie = onClickOnMovie
     }
 
-    fun addDataset(movies: ArrayList<Movie>) {
+    fun addDataset(movies: ArrayList<Movie>, isSearching: Boolean = false) {
+        if (isSearching) { this.movies = arrayListOf() }
         for (movie in movies) {
             if (!this.movies.contains(movie)) {
                 this.movies.add(movie)
