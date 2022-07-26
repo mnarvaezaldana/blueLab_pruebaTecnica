@@ -12,10 +12,11 @@ import com.yucatancorp.bluelab_pruebatecnica.R
 import com.yucatancorp.bluelab_pruebatecnica.data.models.Movie
 
 typealias OnClickOnMovie = (Int, String?) -> Unit
-class MoviesAdapter(private val movies: List<Movie>): RecyclerView.Adapter<MoviesAdapter.MoviesListViewHolder>() {
+class MoviesAdapter: RecyclerView.Adapter<MoviesAdapter.MoviesListViewHolder>() {
 
     private var viewGroup: ViewGroup? = null
     var onClickOnMovie: OnClickOnMovie? = null
+    var movies = arrayListOf<Movie>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesListViewHolder {
         viewGroup = parent
@@ -34,6 +35,15 @@ class MoviesAdapter(private val movies: List<Movie>): RecyclerView.Adapter<Movie
 
     fun setOnClickOnMovieThumbnail(onClickOnMovie: OnClickOnMovie) {
         this.onClickOnMovie = onClickOnMovie
+    }
+
+    fun addDataset(movies: ArrayList<Movie>) {
+        for (movie in movies) {
+            if (!this.movies.contains(movie)) {
+                this.movies.add(movie)
+            }
+        }
+        notifyDataSetChanged()
     }
 
     inner class MoviesListViewHolder(view: View): RecyclerView.ViewHolder(view) {
