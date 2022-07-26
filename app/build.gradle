@@ -8,6 +8,14 @@ plugins {
 android {
     compileSdk 32
 
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "marcosNarvaez-Final.apk"
+
+        }
+    }
+
+
     defaultConfig {
         applicationId "com.yucatancorp.bluelab_pruebatecnica"
         minSdk 21
